@@ -1,8 +1,8 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose"
 
 const MONGODB_URI = process.env.MONGODB_URI!
 
-if (!MONGODB_URI) throw new Error('Please add your Mongo URI to .env.local')
+if (!MONGODB_URI) throw new Error("Please add MONGODB_URI to .env.local")
 
 let cached = (global as any).mongoose || { conn: null, promise: null }
 
