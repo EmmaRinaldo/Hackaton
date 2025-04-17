@@ -11,8 +11,8 @@ export default function Navbar() {
 
   return (
     <nav className="w-full flex items-center justify-between px-4 py-3 border-b shadow-sm">
-      <Link href="/" className="text-xl font-bold">
-        <Image src={logo} alt="Logo" width={40} height={40} className="inline-block mr-2" />
+      <Link href="/">
+        <Image src={logo} alt="Logo" width={80} height={80} className="inline-block mr-2" />
       </Link>
       <div className="flex items-center space-x-2">
         {session ? (
