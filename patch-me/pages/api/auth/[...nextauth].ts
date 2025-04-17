@@ -1,29 +1,37 @@
-// pages/api/auth/[...nextauth].ts
+import { connectToDatabase } from "@/lib/mongodb"
+import { User } from "@/models/User"
+import bcrypt from "bcryptjs"
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import type { AuthOptions } from "next-auth"
 
-export const authOptions = {
+
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (
-          credentials?.email === "emma@patchme.fr" &&
-          credentials?.password === "demo"
-        ) {
-          return { id: "1", name: "Emma", email: credentials.email }
+        await connectToDatabase()
+        const user = await User.findOne({ email: credentials?.email })
+        if (!user) return null
+
+        const isValid = await bcrypt.compare(credentials!.password, user.password)
+        if (!isValid) return null
+
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.prenom + " " + user.nom,
         }
-        return null
       },
     }),
   ],
-  pages: {
-    signIn: "/login",
-  },
+  pages: { signIn: "/login" },
+  session: { strategy: "jwt" },
 }
 
 export default NextAuth(authOptions)
