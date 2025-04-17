@@ -17,34 +17,38 @@ export default function RegisterPage() {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/.test(pwd)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      return setError("Email invalide.")
+        if (!/\S+@\S+\.\S+/.test(email)) {
+        return setError("Email invalide.")
+        }
+
+        if (!validatePassword(password)) {
+        return setError("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.")
+        }
+
+        if (password !== confirmPassword) {
+        return setError("Les mots de passe ne correspondent pas.")
+        }
+
+        const res = await fetch("/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, pseudo, password }),
+        })
+        
+        if (res.ok) {
+            router.push("/")
+        } else {
+            let msg = "Erreur inconnue"
+            try {
+                const data = await res.json()
+                msg = data.message
+            } catch (err) {}
+            setError(msg)
+        }
     }
-
-    if (!validatePassword(password)) {
-      return setError("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.")
-    }
-
-    if (password !== confirmPassword) {
-      return setError("Les mots de passe ne correspondent pas.")
-    }
-
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, pseudo, password }),
-    })
-
-    if (res.ok) {
-      router.push("/")
-    } else {
-      const data = await res.json()
-      setError(data.message || "Erreur inconnue")
-    }
-  }
 
   return (
     <div className="max-w-md mx-auto p-6">
