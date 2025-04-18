@@ -5,6 +5,8 @@ import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
+import Image from "next/image"
+import logo from "@/public/logo-patchme.svg"
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -46,9 +48,16 @@ export default function Navbar() {
   return (
     <nav className="w-full flex items-center justify-between px-4 py-3 border-b shadow-sm">
       {/* Logo */}
-      <Link href="/" className="text-xl font-bold">
-        PatchMe
+      <Link href="/" >
+        <Image
+          src={logo}
+          alt="Logo"
+          width={80}
+          height={80}
+          className="mr-2"
+        />
       </Link>
+
 
       {/* Mobile menu (sheet) */}
       <div className="md:hidden">
