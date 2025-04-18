@@ -5,6 +5,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { categories } from "@/utils/repairData"
+import icon from "../../public/cat1-l1.svg"
 
 const steps = ["Catégorie", "Type", "Problème", "Matériel", "Niveau"]
 
