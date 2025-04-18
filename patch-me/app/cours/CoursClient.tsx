@@ -4,6 +4,9 @@ import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { videos } from "@/utils/videosData"
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Filter } from "lucide-react"
 
 export default function CoursClient() {
   const searchParams = useSearchParams()
@@ -16,7 +19,6 @@ export default function CoursClient() {
   })
 
   useEffect(() => {
-
     if (!searchParams) return
 
     const selectedType = searchParams.get("type") || ""
@@ -51,10 +53,30 @@ export default function CoursClient() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
-      <h1 className="text-lg font-bold mb-4 uppercase tracking-wide text-gray-700">
-        Résultat des recherches
-      </h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-lg font-bold uppercase tracking-wide text-gray-700">
+          Résultat des recherches
+        </h1>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="flex items-center gap-2 text-sm">
+              <Filter className="w-4 h-4" />
+              Modifier les filtres
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-sm">
+            <p className="text-sm text-gray-700">
+              Tu veux changer de critères ? Reprends depuis le{" "}
+              <Link href="/questionnaire" className="text-blue-600 underline">
+                questionnaire
+              </Link>
+              .
+            </p>
+          </DialogContent>
+        </Dialog>
+      </div>
 
+      {/* Filtres affichés */}
       <div className="flex flex-wrap gap-2 mb-6">
         {filters.type && (
           <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
@@ -81,13 +103,15 @@ export default function CoursClient() {
         ))}
       </div>
 
+      {/* Liste des vidéos */}
       {filtered.length > 0 ? (
         <div className="flex flex-col gap-6">
           {filtered.map((video) => (
             <Link
               key={video.id}
               href={`/cours/${video.id}`}
-              className="rounded-xl overflow-hidden shadow-sm border transition hover:shadow-md"
+              className="relative rounded-xl overflow-hidden shadow-sm border transition hover:shadow-md bg-cover bg-center"
+              style={{ backgroundImage: 'url(/bg-cours.svg)' }}
             >
               <div className="relative">
                 <img
@@ -99,7 +123,7 @@ export default function CoursClient() {
                   {video.duration}
                 </div>
               </div>
-              <div className="p-4">
+              <div className="p-4 bg-white bg-opacity-90 backdrop-blur-sm">
                 <p className="text-xs text-muted-foreground mb-1">
                   Matériel requis : {video.tags.tools.join(", ")}
                 </p>
