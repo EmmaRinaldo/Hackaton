@@ -27,6 +27,17 @@ export default function CoursClient() {
     tools: [] as string[],
   })
 
+  const resetFilters = () => {
+    setFilters({
+      category: "",
+      type: "",
+      issue: "",
+      level: "",
+      tools: [],
+    })
+  }
+  
+
   useEffect(() => {
     if (!searchParams) return
 
@@ -201,11 +212,22 @@ export default function CoursClient() {
               </div>
             </div>
 
+            {/* Bouton Réinitialiser */}
+            <Button
+                variant="ghost"
+                className="w-full mb-2 text-red-600"
+                onClick={resetFilters}
+            >
+                Réinitialiser les filtres
+            </Button>
+
+            {/* Bouton Appliquer les filtres */}
             <DialogTrigger asChild>
-              <Button onClick={applyFilters} className="w-full">
-                Appliquer les filtres
-              </Button>
+                <Button onClick={applyFilters} className="w-full">
+                    Appliquer les filtres
+                </Button>
             </DialogTrigger>
+
           </DialogContent>
         </Dialog>
       </div>

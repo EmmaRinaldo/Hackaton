@@ -1,63 +1,71 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
-import Image from "next/image"
 import logo from "@/public/logo-patchme.svg"
 
 export default function Navbar() {
-  const NavLinks = () => (
-    <>
-      <Link href="/questionnaire">
-        <span className="block px-4 py-2 text-sm">Questionnaire</span>
-      </Link>
-      <Link href="/cours">
-        <span className="block px-4 py-2 text-sm">Cours</span>
-      </Link>
-    </>
-  )
-
   return (
-    <nav className="w-full flex items-center justify-between px-4 py-3 border-b shadow-sm">
-      {/* Logo */}
-      <Link href="/">
-        <Image
-          src={logo}
-          alt="Logo PatchMe"
-          width={80}
-          height={80}
-          className="mr-2"
-        />
-      </Link>
+    <nav className="w-full px-4 py-3 border-b shadow-sm bg-white">
+      {/* Mobile layout */}
+      <div className="flex items-center justify-between md:hidden">
+        {/* Loupe */}
+        <Link href="/cours">
+          <Image
+            src="/icon-loupe.svg"
+            alt="Rechercher"
+            width={24}
+            height={24}
+          />
+        </Link>
 
-      {/* Icône loupe */}
-      <Link href="/cours">
-        <Image
-          src="/icon-loupe.svg"
-          alt="Rechercher"
-          width={24}
-          height={24}
-        />
-      </Link>
+        {/* Logo centré */}
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+          <Image
+            src={logo}
+            alt="Logo PatchMe"
+            width={90}
+            height={40}
+          />
+        </Link>
 
-      {/* Mobile menu */}
-      <div className="md:hidden">
+        {/* Hamburger menu */}
         <Sheet>
           <SheetTrigger asChild>
-            <button className="ml-2">
+            <button>
               <Menu className="w-6 h-6" />
             </button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[260px] pt-10">
-            <NavLinks />
+            <nav className="flex flex-col gap-2">
+              <Link href="/questionnaire">Questionnaire</Link>
+              <Link href="/cours">Cours</Link>
+            </nav>
           </SheetContent>
         </Sheet>
       </div>
 
-      {/* Desktop nav */}
-      <div className="hidden md:flex items-center space-x-4">
-        <NavLinks />
+      {/* Desktop layout */}
+      <div className="hidden md:flex items-center justify-between">
+        {/* Logo à gauche */}
+        <Link href="/">
+          <Image
+            src={logo}
+            alt="Logo PatchMe"
+            width={120}
+            height={40}
+          />
+        </Link>
+
+        {/* Liens à droite */}
+        <nav className="flex items-center gap-6 text-sm">
+          <Link href="/questionnaire">Questionnaire</Link>
+          <Link href="/cours">
+            <Image src="/icon-loupe.svg" alt="Rechercher" width={24} height={24} />
+          </Link>
+        </nav>
       </div>
     </nav>
   )
