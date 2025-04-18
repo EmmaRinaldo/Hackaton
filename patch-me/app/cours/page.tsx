@@ -42,22 +42,22 @@ export default function CoursPage() {
 
       {/* Filtres affichés */}
       <div className="flex flex-wrap gap-2 mb-6">
-        {searchParams.get("type") && (
+        {searchParams!.get("type") && (
           <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
             {searchParams.get("type")}
           </span>
         )}
-        {searchParams.get("issue") && (
+        {searchParams!.get("issue") && (
           <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
             {searchParams.get("issue")}
           </span>
         )}
-        {searchParams.get("level") && (
+        {searchParams!.get("level") && (
           <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
             {searchParams.get("level")}
           </span>
         )}
-        {searchParams.getAll("tools").map((tool) => (
+        {searchParams!.getAll("tools").map((tool) => (
           <span
             key={tool}
             className="text-xs border rounded-full px-3 py-1 bg-gray-100"
