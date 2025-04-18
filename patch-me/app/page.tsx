@@ -11,7 +11,7 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center min-h-[80vh] px-4 text-center">
       <h1 className="text-4xl font-bold mb-4">
         {session
-          ? `Bienvenue, ${session.user?.name || session.user?.email}`
+          ? `Bienvenue`
           : "Répare tes vêtements. Découvre un métier."}
       </h1>
       <p className="text-muted-foreground mb-6 max-w-xl">
