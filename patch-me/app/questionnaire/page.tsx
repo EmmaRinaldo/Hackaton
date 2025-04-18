@@ -5,7 +5,6 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { categories } from "@/utils/repairData"
-import icon from "../../public/cat1-l1.svg"
 
 const steps = ["Catégorie", "Type", "Problème", "Matériel", "Niveau"]
 
@@ -65,87 +64,109 @@ export default function QuestionnairePage() {
       case 0:
         return (
           <div>
-            <h2 className="text-[24px] font-semibold mb-4">Tu veux réparer quoi ?</h2>
-            <p className="text-[14px] mb-6">T-shirt, jean, veste… sélectionne ta pièce préférée à réparer.</p>
-            <div className="grid gap-4">
+            <h2 className="text-xl font-semibold mb-4">Tu veux réparer quoi ?</h2>
+            <p className="text-sm mb-6">T-shirt, jean, veste… sélectionne ta pièce préférée à réparer.</p>
+            <div className="grid gap-3">
               {categories.map((cat) => (
                 <button
                   key={cat.key}
                   onClick={() => handleSelect("category", cat.key)}
                   className={cn(
-                    "w-full border p-4 rounded-md flex items-center gap-4 text-left",
+                    "w-full border px-4 py-3 rounded-xl flex items-center gap-4 text-left transition-all",
                     {
-                      "border-green-500 bg-green-50": data.category === cat.key,
+                      "border-green-600 bg-green-50": data.category === cat.key,
                     }
                   )}
                 >
-                  <img src={cat.icon} alt={cat.label} className="w-10 h-10" />
-                  <div>
-                    <p className="font-semibold">{cat.label}</p>
-                    <p className="text-sm italic text-muted-foreground">{cat.desc}</p>
+                  <img src={cat.icon} alt={cat.label} className="w-10 h-10 object-contain" />
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{cat.label}</p>
+                    <p className="text-xs italic text-gray-500">{cat.desc}</p>
                   </div>
+                  {data.category === cat.key && (
+                    <img src="/icon-ok.svg" alt="ok" className="w-5 h-5" />
+                  )}
                 </button>
               ))}
             </div>
           </div>
         )
+  
       case 1:
         const selectedCategory = categories.find((c) => c.key === data.category)
         if (!selectedCategory) return null
         return (
           <div>
-            <h2 className="text-[24px] font-semibold mb-4">Ta pièce, c’est quoi ?</h2>
-            <p className="text-[14px] mb-6">Pour mieux t’aider, choisis le type de ton vêtement.</p>
-            <div className="grid gap-4">
+            <h2 className="text-xl font-semibold mb-4">Ta pièce, c’est quoi ?</h2>
+            <p className="text-sm mb-6">Pour mieux t’aider, choisis le type de ton vêtement.</p>
+            <div className="grid gap-3">
               {selectedCategory.types.map((type) => (
-                <Button
+                <button
                   key={type}
-                  variant={isSelected(type, data.type) ? "default" : "outline"}
                   onClick={() => handleSelect("type", type)}
+                  className={cn(
+                    "w-full border px-4 py-3 rounded-xl flex items-center justify-between text-left transition",
+                    {
+                      "border-green-600 bg-green-50": data.type === type,
+                    }
+                  )}
                 >
-                  {type}
-                </Button>
+                  <span className="font-medium text-sm">{type}</span>
+                  {data.type === type && (
+                    <img src="/icon-ok.svg" alt="ok" className="w-5 h-5" />
+                  )}
+                </button>
               ))}
             </div>
           </div>
         )
+  
       case 2:
         return (
           <div>
-            <h2 className="text-[24px] font-semibold mb-4">Où est le problème ?</h2>
-            <p className="text-[14px] mb-6">Trou, fermeture cassée, couture décousue… précise la zone à réparer.</p>
-            <div className="grid gap-4">
+            <h2 className="text-xl font-semibold mb-4">Où est le problème ?</h2>
+            <p className="text-sm mb-6">Trou, fermeture cassée, couture décousue… précise la zone à réparer.</p>
+            <div className="grid gap-3">
               {[
                 "Zip / Fermeture",
                 "Trou / Accroc / Déchirure",
                 "Couture Décousue",
                 "Pression / Attaches / Velcro"
               ].map((issue) => (
-                <Button
+                <button
                   key={issue}
-                  variant={isSelected(issue, data.issue) ? "default" : "outline"}
                   onClick={() => handleSelect("issue", issue)}
+                  className={cn(
+                    "w-full border px-4 py-3 rounded-xl flex items-center justify-between text-left transition",
+                    {
+                      "border-green-600 bg-green-50": data.issue === issue,
+                    }
+                  )}
                 >
-                  {issue}
-                </Button>
+                  <span className="font-medium text-sm">{issue}</span>
+                  {data.issue === issue && (
+                    <img src="/icon-ok.svg" alt="ok" className="w-5 h-5" />
+                  )}
+                </button>
               ))}
             </div>
           </div>
         )
+  
       case 3:
         return (
           <div>
-            <h2 className="text-[24px] font-semibold mb-4">Avec quoi tu veux réparer ?</h2>
-            <p className="text-[14px] mb-6">On adapte les tutos à ton matériel pour que tu puisses commencer tout de suite.</p>
+            <h2 className="text-xl font-semibold mb-4">Avec quoi tu veux réparer ?</h2>
+            <p className="text-sm mb-6">On adapte les tutos à ton matériel pour que tu puisses commencer tout de suite.</p>
             <div className="flex flex-wrap gap-2">
               {allTools.map((tool) => (
                 <button
                   key={tool}
                   onClick={() => handleSelect("tools", tool)}
                   className={cn(
-                    "border rounded-full px-4 py-2 text-sm",
+                    "border px-4 py-2 rounded-full text-sm transition",
                     {
-                      "bg-black text-white": data.tools.includes(tool),
+                      "bg-green-50 border-green-600 text-black": data.tools.includes(tool),
                       "border-gray-300 text-black": !data.tools.includes(tool),
                     }
                   )}
@@ -156,46 +177,61 @@ export default function QuestionnairePage() {
             </div>
           </div>
         )
+  
       case 4:
         return (
           <div>
-            <h2 className="text-[24px] font-semibold mb-4">Quel est ton niveau ?</h2>
-            <div className="grid gap-4">
+            <h2 className="text-xl font-semibold mb-4">Quel est ton niveau ?</h2>
+            <div className="grid gap-3">
               {["Débutant", "Intermédiaire", "Expert"].map((lvl) => (
-                <Button
+                <button
                   key={lvl}
-                  variant={isSelected(lvl, data.level) ? "default" : "outline"}
                   onClick={() => handleSelect("level", lvl)}
+                  className={cn(
+                    "w-full border px-4 py-3 rounded-xl flex items-center justify-between text-left transition",
+                    {
+                      "border-green-600 bg-green-50": data.level === lvl,
+                    }
+                  )}
                 >
-                  {lvl}
-                </Button>
+                  <span className="font-medium text-sm">{lvl}</span>
+                  {data.level === lvl && (
+                    <img src="/icon-ok.svg" alt="ok" className="w-5 h-5" />
+                  )}
+                </button>
               ))}
             </div>
           </div>
         )
     }
   }
+  
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
-      {/* Stepper */}
-      <div className="flex items-center justify-between mb-6 text-sm text-muted-foreground">
-        {steps.map((s, i) => (
+  
+      {/* Barre de navigation avec retour et stepper */}
+      <div className="flex items-center gap-2 mb-6">
+        {step > 0 && (
+          <button onClick={prev}>
+            <img src="/icon-back.svg" alt="Retour" className="w-5 h-5" />
+          </button>
+        )}
+        <div className="flex-1 h-1 rounded-full bg-gray-200 relative">
           <div
-            key={s}
-            className={cn("flex-1 text-center", {
-              "font-bold text-black": i === step,
-            })}
-          >
-            {s}
-          </div>
-        ))}
+            className="absolute top-0 left-0 h-full rounded-full transition-all"
+            style={{
+              width: `${((step + 1) / steps.length) * 100}%`,
+              backgroundColor: "#FF6035",
+            }}
+          />
+        </div>
       </div>
-
+  
       {/* Étape en cours */}
       {renderStep()}
-
-      {/* Navigation */}
+  
+      {/* Navigation bas */}
       <div className="mt-8 flex justify-between">
         <Button onClick={prev} disabled={step === 0} variant="ghost">
           Précédent
@@ -212,4 +248,5 @@ export default function QuestionnairePage() {
       </div>
     </div>
   )
+  
 }
