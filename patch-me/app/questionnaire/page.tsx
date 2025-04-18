@@ -57,14 +57,14 @@ export default function QuestionnairePage() {
                             className={cn(
                             "w-full border p-4 rounded-md flex items-center gap-4 text-left",
                             {
-                                "border-green-500 bg-green-50": data.category === cat.key,
+                                "border-[#338033] bg-[#F1FFF2]": data.category === cat.key,
                             }
                             )}
                         >
                             <img src={cat.icon} alt={cat.label} className="w-10 h-10" />
                             <div>
-                            <p className="font-semibold">{cat.label}</p>
-                            <p className="text-sm italic text-muted-foreground">{cat.desc}</p>
+                              <p className="font-semibold">{cat.label}</p>
+                              <p className="text-sm italic text-muted-foreground">{cat.desc}</p>
                             </div>
                         </button>
                         ))}
