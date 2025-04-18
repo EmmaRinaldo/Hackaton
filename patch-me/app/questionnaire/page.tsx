@@ -1,6 +1,7 @@
 // app/questionnaire/page.tsx
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -15,6 +16,7 @@ const allTools = [
 ]
 
 export default function QuestionnairePage() {
+  const router = useRouter()
   const [step, setStep] = useState(0)
   const [data, setData] = useState({
     category: "",
@@ -44,8 +46,16 @@ export default function QuestionnairePage() {
   }
 
   const handleSubmit = () => {
-    console.log("Résultat final :", data)
-    // Rediriger ou envoyer vers une API
+    const query = new URLSearchParams()
+
+    if (data.type) query.set("type", data.type)
+    if (data.issue) query.set("issue", data.issue)
+    if (data.level) query.set("level", data.level)
+    if (data.tools.length > 0) {
+      data.tools.forEach((tool) => query.append("tools", tool))
+    }
+
+    router.push(`/cours?${query.toString()}`)
   }
 
   const canProceed = () => {
@@ -78,7 +88,7 @@ export default function QuestionnairePage() {
                     }
                   )}
                 >
-                  <img src={cat.icon} alt={cat.label} className="w-10 h-10 object-contain" />
+                  <img src={cat.icon.replace("../../public", "")} alt={cat.label} className="w-10 h-10 object-contain" />
                   <div className="flex-1">
                     <p className="font-medium text-sm">{cat.label}</p>
                     <p className="text-xs italic text-gray-500">{cat.desc}</p>
@@ -91,7 +101,7 @@ export default function QuestionnairePage() {
             </div>
           </div>
         )
-  
+
       case 1:
         const selectedCategory = categories.find((c) => c.key === data.category)
         if (!selectedCategory) return null
@@ -120,7 +130,7 @@ export default function QuestionnairePage() {
             </div>
           </div>
         )
-  
+
       case 2:
         return (
           <div>
@@ -152,7 +162,7 @@ export default function QuestionnairePage() {
             </div>
           </div>
         )
-  
+
       case 3:
         return (
           <div>
@@ -177,7 +187,7 @@ export default function QuestionnairePage() {
             </div>
           </div>
         )
-  
+
       case 4:
         return (
           <div>
@@ -205,12 +215,10 @@ export default function QuestionnairePage() {
         )
     }
   }
-  
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
-  
-      {/* Barre de navigation avec retour et stepper */}
+      {/* Stepper et bouton retour */}
       <div className="flex items-center gap-2 mb-6">
         {step > 0 && (
           <button onClick={prev}>
@@ -227,15 +235,12 @@ export default function QuestionnairePage() {
           />
         </div>
       </div>
-  
+
       {/* Étape en cours */}
       {renderStep()}
-  
-      {/* Navigation bas */}
-      <div className="mt-8 flex justify-between">
-        <Button onClick={prev} disabled={step === 0} variant="ghost">
-          Précédent
-        </Button>
+
+      {/* Bouton suivant / final */}
+      <div className="mt-8 flex justify-end">
         {step === steps.length - 1 ? (
           <Button onClick={handleSubmit} disabled={!canProceed()}>
             C’est parti !
@@ -248,5 +253,4 @@ export default function QuestionnairePage() {
       </div>
     </div>
   )
-  
 }
