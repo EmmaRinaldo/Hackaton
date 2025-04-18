@@ -18,10 +18,10 @@ export default function CoursPage() {
   useEffect(() => {
     if (!searchParams) return // ✅ protection contre null
 
-    const selectedType = searchParams.get("type") || ""
-    const selectedIssue = searchParams.get("issue") || ""
-    const selectedLevel = searchParams.get("level") || ""
-    const selectedTools = searchParams.getAll("tools")
+    const selectedType = searchParams!.get("type") || ""
+    const selectedIssue = searchParams!.get("issue") || ""
+    const selectedLevel = searchParams!.get("level") || ""
+    const selectedTools = searchParams!.getAll("tools")
 
     setFilters({
       type: selectedType,
