@@ -19,9 +19,9 @@ export default function Home() {
           ? "Commence à apprendre la réparation textile et accumule des badges !"
           : "PatchMe te permet d’apprendre à réparer toi-même tes vêtements, chaussures ou linge."}
       </p>
-      <Link href={session ? "/dashboard" : "/login"}>
+      <Link href={session ? "/questionnaire" : "/login"}>
         <Button className="text-lg px-6 py-3">
-          {session ? "Accéder à mon espace" : "Commencer"}
+          {session ? "Commencer ma réparation" : "Commencer"}
         </Button>
       </Link>
     </section>
