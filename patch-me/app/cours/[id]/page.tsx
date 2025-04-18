@@ -9,9 +9,13 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 export default function CoursDetailPage() {
-  const { id } = useParams()
+    const params = useParams()
+    const id = typeof params?.id === "string" ? params.id : Array.isArray(params?.id) ? params.id[0] : null
+    if (!id) return notFound()
+    
   const video = videos.find((v) => v.id === id)
 
+  if (!id) return notFound()
   if (!video) return notFound()
 
   return (
