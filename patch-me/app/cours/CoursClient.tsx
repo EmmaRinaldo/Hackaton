@@ -1,4 +1,3 @@
-// app/cours/CoursClient.tsx
 "use client"
 
 import { useSearchParams } from "next/navigation"
@@ -17,10 +16,10 @@ export default function CoursClient() {
   })
 
   useEffect(() => {
-    const selectedType = searchParams!.get("type") || ""
-    const selectedIssue = searchParams!.get("issue") || ""
-    const selectedLevel = searchParams!.get("level") || ""
-    const selectedTools = searchParams!.getAll("tools")
+    const selectedType = searchParams.get("type") || ""
+    const selectedIssue = searchParams.get("issue") || ""
+    const selectedLevel = searchParams.get("level") || ""
+    const selectedTools = searchParams.getAll("tools")
 
     setFilters({
       type: selectedType,
@@ -53,7 +52,6 @@ export default function CoursClient() {
         Résultat des recherches
       </h1>
 
-      {/* Filtres affichés */}
       <div className="flex flex-wrap gap-2 mb-6">
         {filters.type && (
           <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
@@ -80,7 +78,6 @@ export default function CoursClient() {
         ))}
       </div>
 
-      {/* Liste des vidéos */}
       {filtered.length > 0 ? (
         <div className="flex flex-col gap-6">
           {filtered.map((video) => (
