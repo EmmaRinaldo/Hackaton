@@ -11,10 +11,10 @@ export default function CoursPage() {
   const [filtered, setFiltered] = useState<typeof videos>([])
 
   useEffect(() => {
-    const selectedType = searchParams.get("type")
-    const selectedIssue = searchParams.get("issue")
-    const selectedLevel = searchParams.get("level")
-    const selectedTools = searchParams.getAll("tools")
+    const selectedType = searchParams!.get("type")
+    const selectedIssue = searchParams!.get("issue")
+    const selectedLevel = searchParams!.get("level")
+    const selectedTools = searchParams!.getAll("tools")
 
     const match = (video: typeof videos[number]) => {
       const tags = video.tags
