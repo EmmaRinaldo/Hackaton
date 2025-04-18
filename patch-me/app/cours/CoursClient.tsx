@@ -1,6 +1,6 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { videos } from "@/utils/videosData"
@@ -8,8 +8,15 @@ import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Filter } from "lucide-react"
 
+const allTools = [
+  "Aiguille à coudre", "Fil", "Ciseaux", "Machine à coudre", "Ruban adhésif",
+  "Épingles", "Colle textile", "Mètre ruban", "Dé à coudre", "Ruban", "Patches décoratifs"
+]
+
 export default function CoursClient() {
   const searchParams = useSearchParams()
+  const router = useRouter()
+
   const [filtered, setFiltered] = useState<typeof videos>([])
   const [filters, setFilters] = useState({
     type: "",
@@ -51,6 +58,28 @@ export default function CoursClient() {
     setFiltered(result)
   }, [searchParams])
 
+  const handleChange = (key: keyof typeof filters, value: string) => {
+    if (key === "tools") {
+      setFilters((prev) => ({
+        ...prev,
+        tools: prev.tools.includes(value)
+          ? prev.tools.filter((tool) => tool !== value)
+          : [...prev.tools, value],
+      }))
+    } else {
+      setFilters((prev) => ({ ...prev, [key]: value }))
+    }
+  }
+
+  const applyFilters = () => {
+    const query = new URLSearchParams()
+    if (filters.type) query.set("type", filters.type)
+    if (filters.issue) query.set("issue", filters.issue)
+    if (filters.level) query.set("level", filters.level)
+    filters.tools.forEach((tool) => query.append("tools", tool))
+    router.push(`/cours?${query.toString()}`)
+  }
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-4">
@@ -64,49 +93,103 @@ export default function CoursClient() {
               Modifier les filtres
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-sm">
-            <p className="text-sm text-gray-700">
-              Tu veux changer de critères ? Reprends depuis le{" "}
-              <Link href="/questionnaire" className="text-blue-600 underline">
-                questionnaire
-              </Link>
-              .
-            </p>
+          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+            <h2 className="font-semibold text-lg mb-4">Filtres</h2>
+
+            {/* Type */}
+            <div className="mb-4">
+              <p className="text-sm font-medium mb-1">Type de vêtement</p>
+              {Array.from(new Set(videos.map(v => v.tags.type))).map(type => (
+                <label key={type} className="block text-sm mb-1">
+                  <input
+                    type="radio"
+                    name="type"
+                    value={type}
+                    checked={filters.type === type}
+                    onChange={() => handleChange("type", type)}
+                    className="mr-2"
+                  />
+                  {type}
+                </label>
+              ))}
+            </div>
+
+            {/* Issue */}
+            <div className="mb-4">
+              <p className="text-sm font-medium mb-1">Problème</p>
+              {Array.from(new Set(videos.map(v => v.tags.issue))).map(issue => (
+                <label key={issue} className="block text-sm mb-1">
+                  <input
+                    type="radio"
+                    name="issue"
+                    value={issue}
+                    checked={filters.issue === issue}
+                    onChange={() => handleChange("issue", issue)}
+                    className="mr-2"
+                  />
+                  {issue}
+                </label>
+              ))}
+            </div>
+
+            {/* Niveau */}
+            <div className="mb-4">
+              <p className="text-sm font-medium mb-1">Niveau</p>
+              {["Débutant", "Intermédiaire", "Expert"].map(level => (
+                <label key={level} className="block text-sm mb-1">
+                  <input
+                    type="radio"
+                    name="level"
+                    value={level}
+                    checked={filters.level === level}
+                    onChange={() => handleChange("level", level)}
+                    className="mr-2"
+                  />
+                  {level}
+                </label>
+              ))}
+            </div>
+
+            {/* Outils */}
+            <div className="mb-6">
+              <p className="text-sm font-medium mb-1">Outils disponibles</p>
+              <div className="flex flex-wrap gap-2">
+                {allTools.map(tool => (
+                  <label key={tool} className="text-xs flex items-center">
+                    <input
+                      type="checkbox"
+                      value={tool}
+                      checked={filters.tools.includes(tool)}
+                      onChange={() => handleChange("tools", tool)}
+                      className="mr-1"
+                    />
+                    {tool}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <Button onClick={applyFilters} className="w-full">
+              Appliquer les filtres
+            </Button>
           </DialogContent>
         </Dialog>
       </div>
 
       {/* Filtres affichés */}
       <div className="flex flex-wrap gap-2 mb-6">
-        {filters.type && (
-          <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
-            {filters.type}
-          </span>
-        )}
-        {filters.issue && (
-          <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
-            {filters.issue}
-          </span>
-        )}
-        {filters.level && (
-          <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">
-            {filters.level}
-          </span>
-        )}
-        {filters.tools.map((tool) => (
-          <span
-            key={tool}
-            className="text-xs border rounded-full px-3 py-1 bg-gray-100"
-          >
-            {tool}
-          </span>
+        {filters.type && <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">{filters.type}</span>}
+        {filters.issue && <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">{filters.issue}</span>}
+        {filters.level && <span className="text-xs border rounded-full px-3 py-1 bg-gray-100">{filters.level}</span>}
+        {filters.tools.map(tool => (
+          <span key={tool} className="text-xs border rounded-full px-3 py-1 bg-gray-100">{tool}</span>
         ))}
       </div>
 
       {/* Liste des vidéos */}
       {filtered.length > 0 ? (
         <div className="flex flex-col gap-6">
-          {filtered.map((video) => (
+          {filtered.map(video => (
             <Link
               key={video.id}
               href={`/cours/${video.id}`}
@@ -135,9 +218,7 @@ export default function CoursClient() {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-500">
-          Aucune vidéo ne correspond aux filtres sélectionnés.
-        </p>
+        <p className="text-sm text-gray-500">Aucune vidéo ne correspond aux filtres sélectionnés.</p>
       )}
     </div>
   )
