@@ -16,6 +16,9 @@ export default function CoursClient() {
   })
 
   useEffect(() => {
+
+    if (!searchParams) return
+
     const selectedType = searchParams.get("type") || ""
     const selectedIssue = searchParams.get("issue") || ""
     const selectedLevel = searchParams.get("level") || ""
